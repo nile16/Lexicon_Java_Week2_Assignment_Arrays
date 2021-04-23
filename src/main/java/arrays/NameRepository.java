@@ -19,7 +19,8 @@ public class NameRepository {
         if (find(fullName) == null) {
             String[] newNames = Arrays.copyOf(names, names.length + 1);
 
-            newNames[newNames.length - 1] = fullName;
+            newNames[newNames.length - 1] = sanitizeName(fullName);
+            Arrays.sort(newNames);
             names = newNames;
 
             return true;
@@ -30,7 +31,7 @@ public class NameRepository {
 
     public static String find(final String fullName) {
         for (String name : names) {
-            if (name.equals(fullName)) {
+            if (name.equalsIgnoreCase(fullName)) {
                 return name;
             }
         }
@@ -46,8 +47,8 @@ public class NameRepository {
             return false;
         }
         for (int i = 0; i < getSize(); i++) {
-            if (names[i].equals(original)) {
-                names[i] = updatedName;
+            if (names[i].equalsIgnoreCase(original)) {
+                names[i] = sanitizeName(updatedName);
                 return true;
             }
         }
@@ -58,7 +59,7 @@ public class NameRepository {
         String[] matches = new String[0];
 
         for (String name : names) {
-            if (name.split(" ")[0].equals(firstName)) {
+            if (name.split(" ")[0].equalsIgnoreCase(firstName)) {
                 matches = Arrays.copyOf(matches, matches.length + 1);
                 matches[matches.length - 1] = name;
             }
@@ -71,7 +72,7 @@ public class NameRepository {
         String[] matches = new String[0];
 
         for (String name : names) {
-            if (name.split(" ")[1].equals(lastName)) {
+            if (name.split(" ")[1].equalsIgnoreCase(lastName)) {
                 matches = Arrays.copyOf(matches, matches.length + 1);
                 matches[matches.length - 1] = name;
             }
@@ -84,7 +85,7 @@ public class NameRepository {
         String[] newNames = new String[0];
 
         for (String name : names) {
-            if (!name.equals(fullName)) {
+            if (!name.equalsIgnoreCase(fullName)) {
                 newNames = Arrays.copyOf(newNames, newNames.length + 1);
                 newNames[newNames.length - 1] = name;
             }
@@ -96,5 +97,19 @@ public class NameRepository {
         }
 
         return false;
+    }
+
+    private static String sanitizeName(String str) {
+        char[] capStr = str.trim().toCharArray();
+
+        for (int i = 0; i < capStr.length; i++) {
+            if (i == 0 || capStr[i - 1] == ' ') {
+                capStr[i] = Character.toUpperCase(capStr[i]);
+            } else {
+                capStr[i] = Character.toLowerCase(capStr[i]);
+            }
+        }
+
+        return new String(capStr);
     }
 }
