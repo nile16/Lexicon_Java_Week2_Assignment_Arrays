@@ -19,7 +19,7 @@ public class App {
             print("Enter FF to find by first name");
             print("Enter FL to find by last name");
             print("Enter C to clear all names from registry");
-            print("Press X to exit program");
+            print("Enter X to exit program");
 
             userSelection = getStringFromUser("Your choice: ").toLowerCase();
 
